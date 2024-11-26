@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.androidtestroom.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         db = UserDatabase.getDatabase(this)
-        readDatabase(db!!)
+//        readDatabase(db!!)
         adapter = RecyclerAdapter(users)
         binding.recyclerRV.layoutManager = LinearLayoutManager(this)
         binding.recyclerRV.adapter = adapter
@@ -32,21 +34,23 @@ class MainActivity : AppCompatActivity() {
                 binding.firstName.text.toString(),
                 binding.lastName.text.toString()
             )
-            addUser(db!!, user)
-            readDatabase(db!!)
+//            addUser(db!!, user)
+//            readDatabase(db!!)
             adapter.notifyDataSetChanged()
         }
     }
-    private fun addUser(db: UserDatabase, user: User) =
-        CoroutineScope(Dispatchers.IO).async {
-            db.userDao().insert(user)
-        }
-    private fun readDatabase(db: UserDatabase) =
-        CoroutineScope(Dispatchers.IO).async {
-            val list = db.userDao().getAll()
-            users.clear()
-            list.forEach{
-                users.add(it)
-            }
-        }
+//    @OptIn(DelicateCoroutinesApi::class)
+//    private fun addUser(db: UserDatabase, user: User) =
+//        GlobalScope.async {
+//            db.userDao().insert(user)
+//        }
+//    @OptIn(DelicateCoroutinesApi::class)
+//    private fun readDatabase(db: UserDatabase) =
+//        GlobalScope.async {
+//            val list = db.userDao().getAll()
+//            users.clear()
+//            list.forEach{
+//                users.add(it)
+//            }
+//        }
 }
